@@ -45,11 +45,12 @@ function getAll() {
 
 function getById(id) {
     const requestOptions = {
-        method: 'GET',
-        headers: authHeader()
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({"Identificacion": id})
     };
 
-    return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
+    return fetch(`${config.apiUrl}/users/getbyid`, requestOptions).then(handleResponse);
 }
 
 function register(user) {

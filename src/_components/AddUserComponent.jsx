@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '@material-ui/core/Button';
@@ -16,6 +16,8 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import { userService } from '../_services';
+import { userConstants } from '../_constants';
 import { store } from '../_helpers';
 
 import { userActions, alertActions, institucionActions } from '../_actions';
@@ -56,6 +58,8 @@ const useStyles = makeStyles((theme) => ({
 
 function AddUserComponent() {
     const instituciones = useSelector(state => state.instituciones);
+
+    /* const userbyid = useSelector(state => state.users.userbyid); */
     const classes = useStyles();
 
     const modelUser = {
@@ -79,9 +83,26 @@ function AddUserComponent() {
 
     function handleChange(e) {
         const { name, value } = e.target;
-        console.log(name, value)
         setUser(user => ({ ...user, [name]: value }));
-        console.log(user);
+    }
+
+    function handleOnBlur(e) {
+        
+        const { name, value } = e.target;
+        switch (name) {
+            case 'Identificacion':
+                validateUserById(value);
+                break;
+            case 'Email':
+
+                break;
+            case 'Usuario':
+
+                break;
+
+            default:
+                break;
+        }
     }
 
     function handleChangePass(e) {
@@ -92,7 +113,10 @@ function AddUserComponent() {
     function handleSubmit(e) {
         e.preventDefault();
 
-        if (!validatePass(user.Contrasena, password)) return;
+        if (!validatePass(user.Contrasena, password)) {
+            dispatch(alertActions.error({message:'Las contraseñas no coinciden', open: true}));
+            return;
+        }
         setSubmitted(true);
 
         if (user.Identificacion &&
@@ -108,6 +132,25 @@ function AddUserComponent() {
         }
     }
 
+    function validateUserById(id){
+
+        userService.getById(id)
+        .then(
+            userbyid => {
+                dispatch(success(userbyid))
+                if (userbyid) {
+                    dispatch(alertActions.error({message:'El id '+ id +' ya existe', open: true}));
+                    setUser(user => ({ ...user, 'Identificacion': '' }));                  
+                }
+            },
+            error => dispatch(failure(error.toString()))
+        );
+
+        function request() { return { type: userConstants.GETBYID_REQUEST } }
+        function success(userbyid) { return { type: userConstants.GETBYID_SUCCESS, userbyid } }
+        function failure(error) { return { type: userConstants.GETBYID_FAILURE, error } }
+    }
+
     function validatePass(pPass1, pPass2) {
         return pPass1 === pPass2;
     }
@@ -117,25 +160,28 @@ function AddUserComponent() {
         setPassword('');
     }
 
+
     useEffect(() => {
-        dispatch(institucionActions.getAll());
+        dispatch(institucionActions.getAll());        
     }, []);
 
     function renderOptions() {
         return instituciones.items.map((dt, i) => {
-         //console.log(dt);
-          return (
-              <MenuItem
-                label="Select a country"
-                value={dt.IdInstitucion}
-               key={i} name={dt.Nombre}>{dt.Nombre}</MenuItem>
-            
-          );
-        });
-       }
+            //console.log(dt);
+            return (
+                <MenuItem
+                    label="Select a country"
+                    value={dt.IdInstitucion}
+                    key={i} name={dt.Nombre}>{dt.Nombre}</MenuItem>
 
+            );
+        });
+    }
+
+    
     return (
         <Grid container component="main" className={classes.root}>
+           
             <CssBaseline />
             <Grid item xs={12} sm={12} md={12} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
@@ -144,6 +190,7 @@ function AddUserComponent() {
                         <div className="row">
                             <div className="col-md-4 col-xs-12 col-lg-4">
                                 <TextField
+                                    onBlur={handleOnBlur}
                                     onChange={handleChange}
                                     fullWidth
                                     value={user.Identificacion}
@@ -184,6 +231,7 @@ function AddUserComponent() {
                         <div className="row">
                             <div className="col-md-4 col-xs-12 col-lg-4">
                                 <TextField
+                                    onBlur={handleOnBlur}
                                     onChange={handleChange}
                                     fullWidth
                                     value={user.Email}
@@ -208,8 +256,8 @@ function AddUserComponent() {
                                     name="Telefono"
                                 />
                             </div>
-                            <div className="col-md-4 col-xs-12 col-lg-4">                              
-                                <FormControl className={classes.formControl} fullWidth style={{marginTop: '16px'}}>
+                            <div className="col-md-4 col-xs-12 col-lg-4">
+                                <FormControl className={classes.formControl} fullWidth style={{ marginTop: '16px' }}>
                                     <InputLabel id="demo-simple-select-error-label">Institución</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-error-label"
@@ -221,7 +269,7 @@ function AddUserComponent() {
                                             id: 'age-native-simple',
                                             margin: "normal",
                                         }}
-                                        
+
                                     >
                                         <MenuItem value="">
                                             <em>Seleccionar...</em>

@@ -9,7 +9,7 @@ export function alert(state = {}, action) {
         open: action.message.open
       };
     case alertConstants.ERROR:
-      return {
+      return {        
         type: 'alert-danger',
         message: action.message.message,
         open: action.message.open
