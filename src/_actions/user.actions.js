@@ -45,13 +45,12 @@ function register(user) {
         userService.register(user)
             .then(
                 user => { 
-                    dispatch(success());
-                    history.push('/login');
-                    dispatch(alertActions.success('Registration successful'));
+                    dispatch(success());                   
+                    dispatch(alertActions.success({message:'Inserción correcta', open: true}));
                 },
                 error => {
                     dispatch(failure(error.toString()));
-                    dispatch(alertActions.error(error.toString()));
+                    dispatch(alertActions.error({message:error.toString(), open: true}));
                 }
             );
     };
@@ -76,7 +75,6 @@ function getAll() {
     function success(users) { return { type: userConstants.GETALL_SUCCESS, users } }
     function failure(error) { return { type: userConstants.GETALL_FAILURE, error } }
 }
-
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _delete(id) {
     return dispatch => {
