@@ -89,6 +89,7 @@ function AddUserComponent() {
     function handleOnBlur(e) {
         
         const { name, value } = e.target;
+        if(!value)return;
         switch (name) {
             case 'Identificacion':
                 validateUserById(value);
@@ -138,7 +139,7 @@ function AddUserComponent() {
         .then(
             userbyid => {
                 dispatch(success(userbyid))
-                if (userbyid) {
+                if (userbyid.length>0) {
                     dispatch(alertActions.error({message:'El id '+ id +' ya existe', open: true}));
                     setUser(user => ({ ...user, 'Identificacion': '' }));                  
                 }
