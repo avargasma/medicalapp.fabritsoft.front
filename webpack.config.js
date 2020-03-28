@@ -22,8 +22,8 @@ module.exports = {
     externals: {
         // global app config object
         config: JSON.stringify({
-           /*  apiUrl: 'https://apifabritsoftschool.herokuapp.com/api/v1' */
-           apiUrl: 'http://localhost:3000/api/v1'
+            apiUrl: 'https://apifabritsoftschool.herokuapp.com/api/v1'
+           /* apiUrl: 'http://localhost:3000/api/v1' */
         })
     }
 }

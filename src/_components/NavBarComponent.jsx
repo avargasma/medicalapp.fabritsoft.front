@@ -13,6 +13,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import PlaylistAdd from '@material-ui/icons/PlaylistAdd';
+import BeenhereOutlinedIcon from '@material-ui/icons/BeenhereOutlined';
+import BlockRoundedIcon from '@material-ui/icons/BlockRounded';
 import Business from '@material-ui/icons/Business';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -110,7 +112,7 @@ function NavBarComponent(props) {
 
     const classes = useStyles();
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -142,7 +144,7 @@ function NavBarComponent(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        FabrITSoft
+                        AyudaMed+
           </Typography>
                 </Toolbar>
             </AppBar>
@@ -179,6 +181,18 @@ function NavBarComponent(props) {
                             <PersonAdd />
                         </ListItemIcon>
                         <ListItemText primary="Nuevo usuario"/>
+                    </ListItem>
+                    <ListItem button key="enableuser" component={Link} to='/adduser'/*  component={props => <Link to="/adduser" {...props} />} */>
+                        <ListItemIcon>
+                            <BeenhereOutlinedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Habilitar usuario"/>
+                    </ListItem>
+                    <ListItem button key="disableuser" component={Link} to='/adduser'/*  component={props => <Link to="/adduser" {...props} />} */>
+                        <ListItemIcon>
+                            <BlockRoundedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Inhabilitar usuario"/>
                     </ListItem>
                 </List>
                 <Divider />
