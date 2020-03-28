@@ -7,6 +7,7 @@ import {
     IntegratedSorting,
     SortingState,
     IntegratedPaging,
+    DataTypeProvider,
 } from '@devexpress/dx-react-grid';
 import {
     Grid,
@@ -14,8 +15,18 @@ import {
     TableHeaderRow,
     PagingPanel,
 } from '@devexpress/dx-react-grid-material-ui';
+import Chip from '@material-ui/core/Chip';
 
 import { userActions } from '../_actions';
+
+const BooleanFormatter = ({ value }) => <Chip label={value ? 'Si' : 'No'} />;
+const BooleanTypeProvider = props => (
+    <DataTypeProvider
+      formatterComponent={BooleanFormatter}
+      {...props}
+    />
+  );
+
 
 function ListUserComponent() {
 
@@ -35,6 +46,8 @@ function ListUserComponent() {
         { name: 'FechaCrea', title: 'Creado' },
         { name: 'FechaModifica', title: 'Modificado' },
     ]);
+
+    const [booleanColumns] = useState(['Activo']);
 
     const [pageSizes] = useState([5, 10, 15]);
 
@@ -63,6 +76,9 @@ function ListUserComponent() {
                             defaultPageSize={5}
                         />
                         <IntegratedPaging />
+                        <BooleanTypeProvider
+                        for={booleanColumns}
+                        />
                         <Table
 
                         />

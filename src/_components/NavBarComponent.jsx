@@ -183,13 +183,13 @@ function NavBarComponent(props) {
                 </List>
                 <Divider />
                 <List>
-                    <ListItem button key="listinst" component={Link} to='/listinstituiones' /* component={props => <Link to="/listusers" {...props} />} */>
+                    <ListItem button key="listinst" component={Link} to='/listinstituciones' /* component={props => <Link to="/listusers" {...props} />} */>
                         <ListItemIcon>
                             <Business />
                         </ListItemIcon>
                         <ListItemText primary="Lista instituciones" />
                     </ListItem>
-                    <ListItem button key="addinstituion" component={Link} to='/addinstituion'/*  component={props => <Link to="/adduser" {...props} />} */>
+                    <ListItem button key="addinstituion" component={Link} to='/addinstitucion'/*  component={props => <Link to="/adduser" {...props} />} */>
                         <ListItemIcon>
                             <PlaylistAdd />
                         </ListItemIcon>

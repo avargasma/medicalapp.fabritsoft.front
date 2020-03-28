@@ -1,25 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
+
 import { userService } from '../_services';
 import { userConstants } from '../_constants';
-import { store } from '../_helpers';
-
 import { userActions, alertActions, institucionActions } from '../_actions';
 
 const useStyles = makeStyles((theme) => ({
@@ -58,8 +53,6 @@ const useStyles = makeStyles((theme) => ({
 
 function AddUserComponent() {
     const instituciones = useSelector(state => state.instituciones);
-
-    /* const userbyid = useSelector(state => state.users.userbyid); */
     const classes = useStyles();
 
     const modelUser = {
@@ -95,10 +88,10 @@ function AddUserComponent() {
                 validateUserById(value);
                 break;
             case 'Email':
-
+                validateUserByEmail(value);
                 break;
             case 'Usuario':
-
+                validateUserByUser(value);
                 break;
 
             default:
@@ -152,6 +145,44 @@ function AddUserComponent() {
         function failure(error) { return { type: userConstants.GETBYID_FAILURE, error } }
     }
 
+    function validateUserByEmail(email){
+
+        userService.getByEmail(email)
+        .then(
+            userbyemail => {
+                dispatch(success(userbyemail))
+                if (userbyemail.length>0) {
+                    dispatch(alertActions.error({message:'El email '+ email +' ya existe', open: true}));
+                    setUser(user => ({ ...user, 'Email': '' }));                  
+                }
+            },
+            error => dispatch(failure(error.toString()))
+        );
+
+        function request() { return { type: userConstants.GETBYEMAIL_REQUEST } }
+        function success(userbyemail) { return { type: userConstants.GETBYEMAIL_SUCCESS, userbyemail } }
+        function failure(error) { return { type: userConstants.GETBYEMAIL_FAILURE, error } }
+    }
+
+    function validateUserByUser(username){
+
+        userService.getByUser(username)
+        .then(
+            userbyusername => {
+                dispatch(success(userbyusername))
+                if (userbyusername.length>0) {
+                    dispatch(alertActions.error({message:'El usuario '+ username +' ya existe', open: true}));
+                    setUser(user => ({ ...user, 'Usuario': '' }));                  
+                }
+            },
+            error => dispatch(failure(error.toString()))
+        );
+
+        function request() { return { type: userConstants.GETBYUSERNAME_REQUEST } }
+        function success(userbyusername) { return { type: userConstants.GETBYUSERNAME_SUCCESS, userbyusername } }
+        function failure(error) { return { type: userConstants.GETBYUSERNAME_FAILURE, error } }
+    }
+
     function validatePass(pPass1, pPass2) {
         return pPass1 === pPass2;
     }
@@ -168,7 +199,6 @@ function AddUserComponent() {
 
     function renderOptions() {
         return instituciones.items.map((dt, i) => {
-            //console.log(dt);
             return (
                 <MenuItem
                     label="Select a country"
@@ -278,22 +308,12 @@ function AddUserComponent() {
                                         {instituciones.items && renderOptions()}
                                     </Select>
                                 </FormControl>
-                                {/* <TextField
-                                    onChange={handleChange}
-                                    fullWidth
-                                    value={user.Institucion}
-                                    type="number"
-                                    margin="normal"
-                                    required
-                                    id="Institucion"
-                                    label="Institución"
-                                    name="Institucion"
-                                /> */}
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-md-4 col-xs-12 col-lg-4">
                                 <TextField
+                                    onBlur={handleOnBlur}
                                     onChange={handleChange}
                                     fullWidth
                                     value={user.Usuario}

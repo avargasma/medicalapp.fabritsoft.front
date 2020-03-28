@@ -80,7 +80,6 @@ function getAll() {
 function getById(id) {
     return dispatch => {
         dispatch(request());
-
         userService.getById(id)
             .then(
                 userbyid => dispatch(success(userbyid)),

@@ -19,6 +19,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
+import { ListInstitucionesPage } from '../Views/Instituciones';
+import { RegisterInstitucionPage } from '../Views/Instituciones/RegisterInstitucionPage';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -90,13 +92,14 @@ function App() {
                 </Dialog>
             }
 
-            {/* <div style={{zIndex:-1000}} className={`alert ${alert.type}`}>{alert.message}</div> */}
             <Router history={history}>
                 <Switch>
                     <Route path="/login" component={LoginPage} />
                     <PrivateRoute exact path="/" component={HomePage} />
                     <PrivateRoute path="/listusers" component={ListUserPage} />
                     <PrivateRoute path="/adduser" component={RegisterPage} />
+                    <PrivateRoute path="/listinstituciones" component={ListInstitucionesPage} />
+                    <PrivateRoute path="/addinstitucion" component={RegisterInstitucionPage} />
                     <Redirect from="/logout" to="/login" />
                     <Redirect from="/" to="/" />
                 </Switch>

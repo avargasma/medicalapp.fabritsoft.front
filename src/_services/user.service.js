@@ -7,6 +7,8 @@ export const userService = {
     register,
     getAll,
     getById,
+    getByEmail,
+    getByUser,
     update,
     delete: _delete
 };
@@ -51,6 +53,26 @@ function getById(id) {
     };
 
     return fetch(`${config.apiUrl}/users/getbyid`, requestOptions).then(handleResponse);
+}
+
+function getByEmail(email) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({"Email": email})
+    };
+
+    return fetch(`${config.apiUrl}/users/getbyemail`, requestOptions).then(handleResponse);
+}
+
+function getByUser(username) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({"Usuario": username})
+    };
+
+    return fetch(`${config.apiUrl}/users/getbyuser`, requestOptions).then(handleResponse);
 }
 
 function register(user) {

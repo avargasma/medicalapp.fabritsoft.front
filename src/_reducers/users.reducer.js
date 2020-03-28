@@ -26,6 +26,30 @@ export function users(state = {}, action) {
       return {
         error: action.error
       };
+    case userConstants.GETBYEMAIL_REQUEST:
+      return {
+        loading: true
+      };
+    case userConstants.GETBYEMAIL_SUCCESS:
+      return {
+        userbyemail: action.userbyemail
+      };
+    case userConstants.GETBYEMAIL_FAILURE:
+      return {
+        error: action.error
+      };
+    case userConstants.GETBYUSERNAME_REQUEST:
+      return {
+        loading: true
+      };
+    case userConstants.GETBYUSERNAME_SUCCESS:
+      return {
+        userbyusername: action.userbyusername
+      };
+    case userConstants.GETBYUSERNAME_FAILURE:
+      return {
+        error: action.error
+      };
     case userConstants.DELETE_REQUEST:
       // add 'deleting:true' property to user being deleted
       return {
